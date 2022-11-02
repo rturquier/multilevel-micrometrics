@@ -4,3 +4,6 @@
 .RData
 .Ruserdata
 .Rproj.user
+
+# macOS Finder display preferences
+.DS_Store
