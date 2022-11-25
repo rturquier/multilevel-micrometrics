@@ -28,4 +28,7 @@ relevant_variables <- c(
 )
 
 main_df <- first_df %>%
-  select(all_of(relevant_variables))
+  select(all_of(relevant_variables)) %>%
+  pivot_longer(cols = contains("MTH"),
+               names_to = c("semester", ".value"),
+               names_pattern = "([A-L])[AB]?(MTH.+)")
