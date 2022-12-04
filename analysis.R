@@ -44,5 +44,7 @@ main_df <- first_df %>%
   mutate(across(everything(),
                 ~ ifelse(. %in% missing_value_codes, NA, .))) %>%
   mutate(teacher  = coalesce(MTHTCH, MTHTCH1, MTH2B),
-         homework = coalesce(MTHJ, MTH1J, MTH2J)) %>%
-  mutate(year = semester %>% convert_semester_to_year())
+         homework = coalesce(MTHJ, MTH1J, MTH2J),
+         year     = semester %>% convert_semester_to_year()) %>%
+  rename(grade    = MTHIMP,
+         student  = CASENUM)
