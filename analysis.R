@@ -35,7 +35,7 @@ relevant_variables <- c(
 
 missing_value_codes <- -99:-95
 
-main_df <- first_df %>%
+semester_df <- first_df %>%
   select(all_of(relevant_variables)) %>%
   filter(COHORT == 2) %>%
   pivot_longer(cols = contains("MTH"),
@@ -48,3 +48,9 @@ main_df <- first_df %>%
          year     = semester %>% convert_semester_to_year()) %>%
   rename(grade    = MTHIMP,
          student  = CASENUM)
+
+main_df <- semester_df %>%
+  group_by(student, year) %>%
+  summarise(teacher  = first(teacher),
+            grade    = mean(grade, na.rm = TRUE),
+            homework = mean(homework, na.rm = TRUE))
