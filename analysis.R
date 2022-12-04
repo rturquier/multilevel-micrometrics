@@ -27,8 +27,12 @@ relevant_variables <- c(
   paste0(LETTERS[7:12], "AMTH2J")
 )
 
+missing_value_codes <- -99:-95
+
 main_df <- first_df %>%
   select(all_of(relevant_variables)) %>%
   pivot_longer(cols = contains("MTH"),
                names_to = c("semester", ".value"),
-               names_pattern = "([A-L])[AB]?(MTH.+)")
+               names_pattern = "([A-L])[AB]?(MTH.+)") %>%
+  mutate(across(everything(),
+                ~ ifelse(. %in% missing_value_codes, NA, .)))
