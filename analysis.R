@@ -36,4 +36,6 @@ main_df <- first_df %>%
                names_to = c("semester", ".value"),
                names_pattern = "([A-L])[AB]?(MTH.+)") %>%
   mutate(across(everything(),
-                ~ ifelse(. %in% missing_value_codes, NA, .)))
+                ~ ifelse(. %in% missing_value_codes, NA, .))) %>%
+  mutate(teacher  = coalesce(MTHTCH, MTHTCH1, MTH2B),
+         homework = coalesce(MTHJ, MTH1J, MTH2J))
