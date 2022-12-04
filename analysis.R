@@ -6,7 +6,13 @@ datasets_path  <- "ICPSR_30263"
 
 
 ####=====================  2. Functions  ======================####
-
+convert_semester_to_year <- function(semester){
+  first_year <- 1987
+  positions_in_alphabet <- match(semester, LETTERS)
+  years_from_start <- (positions_in_alphabet - 1) %/% 2
+  years <- first_year + years_from_start
+  return(years)
+}
 
 ####=====================  3. Main code  ======================####
 first_df <- read_dta(
@@ -38,4 +44,5 @@ main_df <- first_df %>%
   mutate(across(everything(),
                 ~ ifelse(. %in% missing_value_codes, NA, .))) %>%
   mutate(teacher  = coalesce(MTHTCH, MTHTCH1, MTH2B),
-         homework = coalesce(MTHJ, MTH1J, MTH2J))
+         homework = coalesce(MTHJ, MTH1J, MTH2J)) %>%
+  mutate(year = semester %>% convert_semester_to_year())
