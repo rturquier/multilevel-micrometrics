@@ -31,6 +31,7 @@ missing_value_codes <- -99:-95
 
 main_df <- first_df %>%
   select(all_of(relevant_variables)) %>%
+  filter(COHORT == 2) %>%
   pivot_longer(cols = contains("MTH"),
                names_to = c("semester", ".value"),
                names_pattern = "([A-L])[AB]?(MTH.+)") %>%
