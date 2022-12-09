@@ -51,6 +51,4 @@ semester_df <- first_df %>%
 
 main_df <- semester_df %>%
   group_by(student, year) %>%
-  summarise(teacher  = first(teacher),
-            grade    = mean(grade, na.rm = TRUE),
-            homework = mean(homework, na.rm = TRUE))
+  summarise(across(c(teacher, grade, homework), first))
