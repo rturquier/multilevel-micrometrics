@@ -55,3 +55,17 @@ LSAY_data <- read_dta(
 )
 
 main_df <- prepare(LSAY_data)
+
+
+# First regression
+ols <- lm(grade ~ homework, main_df)
+
+main_df %>%
+  mutate(homework_below_40 = if_else(homework < 40, homework, NaN),
+         homework_below_20 = if_else(homework < 20, homework, NaN)) %>%
+  ggplot(aes(x = homework, y = grade)) + 
+    geom_point(alpha = 0.2) +
+    geom_smooth(method = "lm") +
+    geom_smooth(method = "lm", aes(x = homework_below_40), color = "#DC2680AA") +
+    geom_smooth(method = "lm", aes(x = homework_below_20), color = "#FFB000AA")
+  
