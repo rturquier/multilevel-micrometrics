@@ -13,40 +13,66 @@ convert_semester_to_year <- function(semester){
   return(years)
 }
 
-prepare <- function(LSAY_data){
-  # Select, filter, reshape and format the LSAY dataset
-  
-  relevant_variables <- c(
+
+select_relevant_variables <- function(LSAY_data){
+  id_variables <- c(
     "CASENUM",                                    # student id
     "COHORT",                                     # cohort number
     paste0(LETTERS[1:6], "MTHTCH"),               # teacher ID, math class 1
     paste0(LETTERS[7:12], "MTHTCH1"),             # teacher ID, math class 1
-    paste0(LETTERS[7:12], "AMTH2B"),              # teacher ID, math class 2
-    paste0(LETTERS[1:12][c(T, F)], "MTHIMP"),     # result to math test
-    paste0(LETTERS[1:12][c(T, F)], "MTHIMPF"),    # flag for missing / imputed
-    paste0(LETTERS[1:12][c(T, F)], "MTHIRT"),     # result to math test (IRT)
-    paste0(LETTERS[1:6], "BMTHJ"),                # homework hours (students)
-    paste0(LETTERS[7:12], "AMTH1J"),              # homework hours (class 1)
-    paste0(LETTERS[7:12], "AMTH2J"),              # homework hours (class 2)
+    paste0(LETTERS[7:12], "AMTH2B")               # teacher ID, math class 2
   )
   
-  missing_value_codes <- -99:-95
+  test_result_variables <- c(
+    paste0(LETTERS[1:12][c(T, F)], "MTHIMP"),     # result to math test
+    paste0(LETTERS[1:12][c(T, F)], "MTHIMPF"),    # flag for missing / imputed
+    paste0(LETTERS[1:12][c(T, F)], "MTHIRT")      # result to math test (IRT)
+  )
+  
+  homework_student_variables <- c(
+    paste0(LETTERS[1:6], "BMTHJ"),                # homework hours (students)
+    paste0(LETTERS[7:12], "AMTH1J"),              # homework hours (class 1)
+    paste0(LETTERS[7:12], "AMTH2J")               # homework hours (class 2)
+  )
+  
+  homework_teacher_variables <- c(
+    "BJ19", "DJ22", "FJ21", "HJ19", "JJ19", "LJ21"
+  )
+  
+  relevant_variables <- c(
+    id_variables,
+    test_result_variables,
+    homework_student_variables,
+    homework_teacher_variables
+  )
   
   LSAY_data %>%
     select(all_of(relevant_variables)) %>%
+    return()
+}
+
+prepare <- function(LSAY_data){
+  # Select, filter, reshape and format the LSAY dataset
+  
+  missing_value_codes <- -99:-95
+
+  LSAY_data %>%
+    select_relevant_variables() %>%
     filter(COHORT == 2) %>%
-    pivot_longer(cols = contains("MTH"),
+    pivot_longer(cols = !c("CASENUM", "COHORT"),
                  names_to = c("semester", ".value"),
-                 names_pattern = "([A-L])[AB]?(MTH.+)") %>%
+                 names_pattern = "([A-L])[AB]?(.+)") %>%
     mutate(across(everything(),
                   ~ ifelse(. %in% missing_value_codes, NA, .))) %>%
-    mutate(teacher  = coalesce(MTHTCH, MTHTCH1, MTH2B),
-           homework = coalesce(MTHJ, MTH1J, MTH2J),
-           year     = semester %>% convert_semester_to_year()) %>%
-    rename(grade    = MTHIMP,
-           student  = CASENUM) %>%
+    mutate(teacher          = coalesce(MTHTCH, MTHTCH1, MTH2B),
+           homework_student = coalesce(MTHJ, MTH1J, MTH2J),
+           homework_teacher = coalesce(J19, J21, J22),
+           year             = semester %>% convert_semester_to_year()) %>%
+    rename(grade   = MTHIMP,
+           student = CASENUM) %>%
     group_by(student, year) %>%
-    summarise(across(c(teacher, grade, homework), first))
+    summarise(across(c(teacher, grade, homework_student), first),
+              homework_teacher = last(homework_teacher))
 }
 
 ####=====================  3. Main code  ======================####
