@@ -17,17 +17,17 @@ prepare <- function(LSAY_data){
   # Select, filter, reshape and format the LSAY dataset
   
   relevant_variables <- c(
-    "CASENUM",
-    "COHORT",
-    paste0(LETTERS[1:6], "MTHTCH"),
-    paste0(LETTERS[7:12], "MTHTCH1"),
-    paste0(LETTERS[7:12], "AMTH2B"),
-    paste0(LETTERS[1:12][c(T, F)], "MTHIMP"),
-    paste0(LETTERS[1:12][c(T, F)], "MTHIMPF"),
-    paste0(LETTERS[1:12][c(T, F)], "MTHIRT"),
-    paste0(LETTERS[1:6], "BMTHJ"),
-    paste0(LETTERS[7:12], "AMTH1J"),
-    paste0(LETTERS[7:12], "AMTH2J")
+    "CASENUM",                                    # student id
+    "COHORT",                                     # cohort number
+    paste0(LETTERS[1:6], "MTHTCH"),               # teacher ID, math class 1
+    paste0(LETTERS[7:12], "MTHTCH1"),             # teacher ID, math class 1
+    paste0(LETTERS[7:12], "AMTH2B"),              # teacher ID, math class 2
+    paste0(LETTERS[1:12][c(T, F)], "MTHIMP"),     # result to math test
+    paste0(LETTERS[1:12][c(T, F)], "MTHIMPF"),    # flag for missing / imputed
+    paste0(LETTERS[1:12][c(T, F)], "MTHIRT"),     # result to math test (IRT)
+    paste0(LETTERS[1:6], "BMTHJ"),                # homework hours (students)
+    paste0(LETTERS[7:12], "AMTH1J"),              # homework hours (class 1)
+    paste0(LETTERS[7:12], "AMTH2J"),              # homework hours (class 2)
   )
   
   missing_value_codes <- -99:-95
