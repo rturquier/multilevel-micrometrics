@@ -2,6 +2,7 @@
 library(haven)
 library(tidyverse)
 library(plm)
+library(lfe)
 
 datasets_path  <- "ICPSR_30263"
 
@@ -135,3 +136,5 @@ within_students_with_teacher_dummies <- plm::plm(
   index = c("student", "year"),
   model = "within"
 )
+
+zig_zag <- lfe::felm(grade ~ homework_teacher | student + teacher, main_df)
