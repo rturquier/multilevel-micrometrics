@@ -128,3 +128,10 @@ first_difference <- plm::plm(grade ~ homework_teacher,
                               data = main_df,
                               index = c("student", "year"),
                               model = "fd")
+
+within_students_with_teacher_dummies <- plm::plm(
+  grade ~ homework_teacher + teacher,
+  data = main_df,
+  index = c("student", "year"),
+  model = "within"
+)
