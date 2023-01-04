@@ -1,6 +1,7 @@
 ####=====================  1. Setup  ======================####
 library(haven)
 library(tidyverse)
+library(plm)
 
 datasets_path  <- "ICPSR_30263"
 
@@ -112,3 +113,8 @@ main_df %>%
 ols <- lm(grade ~ homework_teacher, main_df)
 
 student_dummies <- lm(grade ~ homework_teacher + student, main_df)
+
+random_effects <- plm::plm(grade ~ homework_teacher,
+                           data = main_df,
+                           index = c("student", "year"),
+                           model = "random")
