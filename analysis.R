@@ -110,3 +110,5 @@ main_df %>%
 
 # ---- Regressions ----
 ols <- lm(grade ~ homework_teacher, main_df)
+
+student_dummies <- lm(grade ~ homework_teacher + student, main_df)
