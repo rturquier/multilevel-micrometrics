@@ -72,7 +72,9 @@ prepare <- function(LSAY_data){
            student = CASENUM) %>%
     group_by(student, year) %>%
     summarise(across(c(teacher, grade, homework_student), first),
-              homework_teacher = last(homework_teacher))
+              homework_teacher = last(homework_teacher),
+              prof_has_changed = n_distinct(teacher) > 1) %>%
+    mutate(homework_teacher = if_else(prof_has_changed, NA, homework_teacher))
 }
 
 ####=====================  3. Main code  ======================####
