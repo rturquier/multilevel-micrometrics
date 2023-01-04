@@ -97,5 +97,5 @@ main_df %>%
   theme(plot.title = element_text(size = 11, hjust = -0.08, vjust = -2))
 
 
-# First regression
-ols <- lm(grade ~ homework, main_df)
+# ---- Regressions ----
+ols <- lm(grade ~ homework_teacher, main_df)
