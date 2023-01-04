@@ -97,17 +97,3 @@ main_df %>%
 
 # First regression
 ols <- lm(grade ~ homework, main_df)
-
-
-# investigate outliers: 
-main_df %>%
-  ggplot(aes(y = homework, x = 0)) +
-    geom_jitter(width = .6, alpha = .6, size = .1) +
-    theme_minimal() +
-    scale_x_discrete(labels = c(0)) +
-    theme(axis.title = element_blank()) +
-    ggtitle("homework")
-
-main_df %>% 
-  ggplot(aes(x = homework)) +
-    geom_histogram()
