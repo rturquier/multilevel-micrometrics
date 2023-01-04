@@ -51,6 +51,13 @@ select_relevant_variables <- function(LSAY_data){
     return()
 }
 
+set_types <- function(summarised_LSAY_data){
+  summarised_LSAY_data %>%
+    mutate(student = student %>% as.factor(),
+           teacher = teacher %>% as.factor(),
+           year    = year    %>% as.integer())
+}
+
 prepare <- function(LSAY_data){
   # Select, filter, reshape and format the LSAY dataset
   
@@ -73,8 +80,12 @@ prepare <- function(LSAY_data){
     group_by(student, year) %>%
     summarise(across(c(teacher, grade, homework_student), first),
               homework_teacher = last(homework_teacher),
-              prof_has_changed = n_distinct(teacher) > 1) %>%
-    mutate(homework_teacher = if_else(prof_has_changed, NA, homework_teacher))
+              prof_has_changed = n_distinct(teacher) > 1,
+              .groups = "drop") %>%
+    mutate(homework_teacher = if_else(prof_has_changed,
+                                     NA_real_,
+                                     homework_teacher)) %>%
+    set_types()
 }
 
 ####=====================  3. Main code  ======================####
