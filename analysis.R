@@ -82,18 +82,21 @@ LSAY_data <- read_dta(
 
 main_df <- prepare(LSAY_data)
 
+# Scatter plot
+main_df %>%
+  ggplot(aes(x = homework_teacher, y = grade)) + 
+  geom_smooth(method = "lm", color="#FF3BA05D", size = 0.5, se = F) +
+  geom_jitter(alpha = 0.07) +
+  labs(x = "Hours of homework reported by teacher", y = "") +
+  ggtitle("Math test grade out of 100") +
+  scale_x_continuous(minor_breaks = c(1:4, 6:9, 12)) +
+  scale_y_continuous(breaks = 0:4 * 25, limits = c(0, 100)) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 11, hjust = -0.08, vjust = -2))
+
 
 # First regression
 ols <- lm(grade ~ homework, main_df)
-
-main_df %>%
-  mutate(homework_below_40 = if_else(homework < 40, homework, NaN),
-         homework_below_20 = if_else(homework < 20, homework, NaN)) %>%
-  ggplot(aes(x = homework, y = grade)) + 
-    geom_point(alpha = 0.2) +
-    geom_smooth(method = "lm") +
-    geom_smooth(method = "lm", aes(x = homework_below_40), color = "#DC2680AA") +
-    geom_smooth(method = "lm", aes(x = homework_below_20), color = "#FFB000AA")
 
 
 # investigate outliers: 
