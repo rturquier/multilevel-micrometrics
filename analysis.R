@@ -85,7 +85,7 @@ main_df <- prepare(LSAY_data)
 # Scatter plot
 main_df %>%
   ggplot(aes(x = homework_teacher, y = grade)) + 
-  geom_smooth(method = "lm", color="#FF3BA05D", size = 0.5, se = F) +
+  geom_smooth(method = "lm", color="#FF3BA05D", linewidth = 0.5, se = F) +
   geom_jitter(alpha = 0.07) +
   labs(x = "Hours of homework reported by teacher", y = "") +
   ggtitle("Math test grade out of 100") +
