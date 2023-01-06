@@ -102,7 +102,7 @@ main_df %>%
   ggplot(aes(x = homework_teacher, y = grade)) + 
   geom_smooth(method = "lm", color="#FF3BA05D", linewidth = 0.5, se = F) +
   geom_jitter(alpha = 0.07) +
-  labs(x = "Hours of homework reported by teacher", y = "") +
+  labs(x = "Weekly hours of homework given", y = "") +
   ggtitle("Math test grade out of 100") +
   scale_x_continuous(minor_breaks = c(1:4, 6:9, 12)) +
   scale_y_continuous(breaks = 0:4 * 25, limits = c(0, 100)) +
