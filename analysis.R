@@ -120,15 +120,20 @@ random_effects <- plm::plm(grade ~ homework_teacher,
                            index = c("student", "year"),
                            model = "random")
 
-within_estimation <- plm::plm(grade ~ homework_teacher,
-                              data = main_df,
-                              index = c("student", "year"),
-                              model = "within")
+within_student <- plm::plm(grade ~ homework_teacher,
+                           data = main_df,
+                           index = c("student", "year"),
+                           model = "within")
 
-first_difference <- plm::plm(grade ~ homework_teacher,
-                              data = main_df,
-                              index = c("student", "year"),
-                              model = "fd")
+first_difference_student <- plm::plm(grade ~ homework_teacher,
+                                     data = main_df,
+                                     index = c("student", "year"),
+                                     model = "fd")
+
+within_teacher <- plm::plm(grade ~ homework_teacher,
+                           data = main_df,
+                           index = c("teacher", "year"),
+                           model = "within")
 
 within_students_with_teacher_dummies <- plm::plm(
   grade ~ homework_teacher + teacher,
