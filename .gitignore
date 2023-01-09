@@ -8,5 +8,8 @@ ICPSR_30263/
 .Ruserdata
 .Rproj.user
 
+# Plots
+plots/
+
 # macOS Finder display preferences
 .DS_Store
